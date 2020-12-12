@@ -6,7 +6,7 @@ const aeronaveController = require("../controllers/aeronave.controller");
 //module.exports = router;
 
 //module.exports = (router) => {
-    router.get("/", aeronaveController.getAeronaves);
+    router.get("/", aeronaveController.getAllAeronaves);
     router.post("/", aeronaveController.createAeronave);
     router.delete("/:id", aeronaveController.deleteAeronave);
 //};

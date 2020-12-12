@@ -6,7 +6,7 @@ const naveController = require("../controllers/nave.controller");
 //module.exports = router;
 
 //module.exports = (router) => {
-    router.get("/", naveController.getNaves);
+    router.get("/", naveController.getAllNaves);
     router.post("/", naveController.createNave);
     router.delete("/:id", naveController.deleteNave);
 //};

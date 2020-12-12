@@ -6,7 +6,7 @@ const revisorController = require("../controllers/revisor.controller");
 //module.exports = router;
 
 //module.exports = (router) => {
-    router.get("/", revisorController.getRevisores);
+    router.get("/", revisorController.getAllRevisores);
     router.post("/", revisorController.createRevisor);
     router.delete("/:id", revisorController.deleteRevisor);
 //};

@@ -1,7 +1,7 @@
 const revisionModel = require("../models/revision.model");
 const revisionController = {};
 
-revisionController.getAllRevisions = async (req, res) => {
+revisionController.getAllRevisiones = async (req, res) => {
     const allRevisions = await revisionModel.find();
     res.json(allRevisions);
 };

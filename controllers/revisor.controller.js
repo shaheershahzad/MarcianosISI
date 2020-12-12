@@ -1,7 +1,7 @@
 const revisorModel = require("../models/revisor.model");
 const revisorController = {};
 
-revisorController.getAllRevisors = async (req, res) => {
+revisorController.getAllRevisores = async (req, res) => {
     const allRevisors = await revisorModel.find();
     res.json(allRevisors);
 };

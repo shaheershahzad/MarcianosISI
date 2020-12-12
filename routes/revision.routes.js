@@ -6,7 +6,7 @@ const revisionController = require("../controllers/revision.controller");
 //module.exports = router;
 
 //module.exports = (router) => {
-    router.get("/", revisionController.getRevision);
+    router.get("/", revisionController.getAllRevisiones);
     router.post("/", revisionController.createRevision);
     router.delete("/:id", revisionController.deleteRevision);
 //};

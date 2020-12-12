@@ -38,7 +38,7 @@ app.use('/api/nave', naveRoutes);
 app.use('/api/aeronave', aeronaveRoutes);
 app.use('/api/pasajero', pasajeroRoutes);
 app.use('/api/revisor', revisorRoutes);
-app.use('/api/revision', revisonRoutes);
+app.use('/api/revision', revisionRoutes);
 
 
 app.listen(PORT, () => console.log("Server on port 3000"));

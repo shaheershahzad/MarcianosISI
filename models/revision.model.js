@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 mongoose.set("useCreateIndex", true);
 mongoose.set("useUnifiedTopology", true);
 
-const aeronaveSchema = new Schema({
+const revisionSchema = new Schema({
     idAeronave: {
         type: String,
         required: true,
