@@ -32,4 +32,36 @@ aeronaveController.deleteAeronave = async (req, res) => {
     });
 };
 
+aeronaveController.getPasajeros = async (req, res) => {
+    const aeronave = await aeronaveModel.findById(req.params.idAeronave);
+    if(aeronave){
+        res.json(aeronave.pasajeros);
+    }else{
+        res.status(409).send("No hay pasajeros en la aeronave");
+    }
+};
+
+aeronaveController.addPasajero = async (req, res) => {
+    const aeronave = await aeronaveModel.findById(req.params.idAeronave);
+    if(aeronave){
+        if(aeronave.pasajeros.length < aeronave.maxPasajeros){
+            await aeronaveModel.findByIdAndUpdate(req.params.idAeronave, { $addToSet: { pasajeros: [req.params.idPasajero] } });
+            res.json({
+                "status":"Pasajero añadido"
+            });
+        }else{
+            res.status(409).send("Aeronave llena");
+        }
+    }else{
+        res.status(404).send("Aeronave no existe");
+    }
+};
+
+aeronaveController.removePasajero = async (req, res) => {
+    await aeronaveModel.findByIdAndUpdate(req.params.idAeronave, { $pull: { pasajeros: { $in: [ req.params.idPasajero ] } } });
+    res.json({
+        "status":"Pasajero quitado"
+    });
+};
+
 module.exports = aeronaveController;

@@ -23,7 +23,13 @@ const aeronaveSchema = new Schema({
         type: String,
         required: true,
         trim: true
-    }
+    },
+    pasajeros: [
+        {
+            type: String,
+            trim: true
+        } 
+    ] 
 },
 {
     timestamps: true
