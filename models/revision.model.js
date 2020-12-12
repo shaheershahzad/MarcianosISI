@@ -10,7 +10,7 @@ const revisionSchema = new Schema({
         trim: true
     },
     idRevisor: {
-        type: Number,
+        type: String,
         required: true,
         trim: true
     },

@@ -2,7 +2,7 @@ const naveModel = require("../models/nave.model");
 const naveController = {};
 
 naveController.getAllNaves = async (req, res) => {
-    const allNaves = await NaveModel.find();
+    const allNaves = await naveModel.find();
     res.json(allNaves);
 };
 
