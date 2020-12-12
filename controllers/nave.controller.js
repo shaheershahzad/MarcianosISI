@@ -22,11 +22,11 @@ naveController.createNave = async (req, res) => {
     }
 };
 
-aeronaveController.deleteAeronave = async (req, res) => {
-    await aeronaveModel.findByIdAndRemove(req.params.id);
+naveController.deleteNave = async (req, res) => {
+    await naveModel.findByIdAndRemove(req.params.id);
     res.json({
-        "status":"Aeronave borrado"
+        "status":"Nave borrada"
     });
 };
 
-module.exports = aeronaveController;
+module.exports = naveController;
