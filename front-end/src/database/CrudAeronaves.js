@@ -14,7 +14,6 @@ export function obtenerAeronaves(listaNavesNodrizas,onSuccess, onError) {
   axios
     .get("http://localhost:3000/api/aeronave", {})
     .then(function(response) {
-      console.log(response.data);
       
       var naves = [];
       response.data.forEach(element => {
@@ -22,17 +21,12 @@ export function obtenerAeronaves(listaNavesNodrizas,onSuccess, onError) {
         var naveDestinoName = getNaveNodrizaFromList(element.destino,listaNavesNodrizas).nombre;
           naves.push(new Aeronave(element._id,element.nombre,element.maxPasajeros,naveOrigenName,naveDestinoName,element.pasajeros))
       });
-      console.log("naves");
-
-      console.log(naves);
-
       onSuccess(naves);
     })
     .catch(function(error) {
-      console.log(error.response);
       var errorCode = error.response.status;
       var errorText = error.response.data;
-      if(errorCode == 404){
+      if(errorCode == 404 || errorCode == 500){
         onError("Parametros no válidos");
       }else{
         onError(errorText);
@@ -54,10 +48,9 @@ export function crearAeronave(nombre,maxPasajeros,origen,destino,pasajeros, onSu
       onSuccess();
     })
         .catch(function(error) {
-      console.log(error.response);
       var errorCode = error.response.status;
       var errorText = error.response.data;
-      if(errorCode == 404){
+      if(errorCode == 404 || errorCode == 500){
         onError("Parametros no válidos");
       }else{
         onError(errorText);
@@ -69,10 +62,7 @@ export function crearAeronave(nombre,maxPasajeros,origen,destino,pasajeros, onSu
 export function borrarAeronave() {}
 
 export function anadirPasajero(idAeronave, idPasajero, onSuccess, onError) {
-  console.log("ids")
 
-  console.log(idAeronave)
-  console.log(idPasajero)
 
   axios
     .put(
@@ -86,10 +76,9 @@ export function anadirPasajero(idAeronave, idPasajero, onSuccess, onError) {
       onSuccess();
     })
     .catch(function(error) {
-      console.log(error.response);
       var errorCode = error.response.status;
       var errorText = error.response.data;
-      if(errorCode == 404){
+      if(errorCode == 404 || errorCode == 500){
         onError("Parametros no válidos");
       }else{
         onError(errorText);
@@ -99,12 +88,6 @@ export function anadirPasajero(idAeronave, idPasajero, onSuccess, onError) {
 }
 
 export function bajarPasajero(idAeronave, idPasajero, onSuccess, onError) {
-
-  console.log("ids")
-
-  console.log(idAeronave)
-  console.log(idPasajero)
-
   axios
     .put(
       "http://localhost:3000/api/aeronave/" +
@@ -117,10 +100,9 @@ export function bajarPasajero(idAeronave, idPasajero, onSuccess, onError) {
       onSuccess();
     })
         .catch(function(error) {
-      console.log(error.response);
       var errorCode = error.response.status;
       var errorText = error.response.data;
-      if(errorCode == 404){
+      if(errorCode == 404 || errorCode == 500){
         onError("Parametros no válidos");
       }else{
         onError(errorText);

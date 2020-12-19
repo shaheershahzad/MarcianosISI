@@ -26,12 +26,6 @@ export default {
   data() {
     return {};
   },
-  methods: {
-    logOut: async function() {
-      console.log("CLicked cerrar sesion");
-      router.push({ name: "login" });
-    },
-  },
 };
 </script>
 

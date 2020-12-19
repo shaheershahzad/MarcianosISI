@@ -13,10 +13,9 @@ export function crearNaveNodriza(nombre,onSuccess,onError){
       onSuccess();
     })
         .catch(function(error) {
-      console.log(error.response);
       var errorCode = error.response.status;
       var errorText = error.response.data;
-      if(errorCode == 404){
+      if(errorCode == 404 || errorCode == 500){
         onError("Parametros no válidos");
       }else{
         onError(errorText);
@@ -37,20 +36,21 @@ export function obtenerNavesNodrizas(onSuccess,onError){
 
       axios.get('http://localhost:3000/api/nave', { })
     .then(function (response) {
-        console.log(response.data);
         var naves = [];
         response.data.forEach(element => {
             naves.push(new NaveNodriza(element._id,element.nombre))
         });
-        console.log("naves");
-  
-        console.log(naves);
   
         onSuccess(naves);
     })
     .catch(function (error) {
-      console.log(error);
-      onError(error);
+      var errorCode = error.response.status;
+      var errorText = error.response.data;
+      if(errorCode == 404 || errorCode == 500){
+        onError("Parametros no válidos");
+      }else{
+        onError(errorText);
+      }
     });
 
 }
@@ -66,12 +66,15 @@ export function eliminarNaveNodriza(id,onSuccess,onError){
 
       axios.delete('http://localhost:3000/api/nave/'+id, { })
     .then(function (response) {
-      console.log(response.data);
       onSuccess(response.data);
     })
     .catch(function (error) {
-      console.log(error);
-      onError(error);
-    });
+      var errorCode = error.response.status;
+      var errorText = error.response.data;
+      if(errorCode == 404 || errorCode == 500){
+        onError("Parametros no válidos");
+      }else{
+        onError(errorText);
+      }    });
 
 }
