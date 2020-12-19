@@ -26,13 +26,18 @@ export function crearRevision(idAeronave,idRevisor,fechaRevision,onSuccess,onErr
     });
 
 }
-import NaveNodriza from "../objects/naveNodriza.js";
+import Revision from "../objects/revision.js";
 
 export function obtenerRevisiones(onSuccess,onError){
 
       axios.get('http://localhost:3000/api/revision', { })
     .then(function (response) {
-      onSuccess(response.data);
+      var revisiones = [];
+        response.data.forEach(element => {
+          revisiones.push(new Revision(element._id,element.idAeronave,element.idRevisor,element.fechaRevision))
+        });
+  
+        onSuccess(revisiones);
     })
     .catch(function (error) {
       onError(error);

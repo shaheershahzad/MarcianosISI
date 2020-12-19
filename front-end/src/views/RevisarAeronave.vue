@@ -15,11 +15,11 @@
             <template v-slot:default="{ item }">
               <v-card :key="componentKey" class="pa-4" outlined>
                 <p class="display-1 text--primary">
-                  {{ item.name }}
+                  {{ item.fechaRevision }}
                 </p>
                 <div class="text--primary">ID: {{ item.id }}</div>
-                <div class="text--primary">Desde: {{ item.id }}</div>
-                <div class="text--primary">Hasta: {{ item.id }}</div>
+                <div class="text--primary">NombreRevisor: {{ item.nombreRevisor }}</div>
+                <div class="text--primary">Aeronave: {{ item.idAeronave }}</div>
               </v-card>
             </template>
           </v-virtual-scroll>
@@ -60,7 +60,7 @@
         </v-card>
 
         <template>
-          <v-btn block :loading="guardandoNave" @click="guardarNave">
+          <v-btn block :loading="creandoRevision" @click="guardarRevision">
             Generar revision
           </v-btn>
         </template></v-col
@@ -73,6 +73,7 @@
 import * as crudAeronaves from "../database/CrudAeronaves";
 import * as crudNaveNodriza from "../database/CrudNaveNodriza.js";
 import * as crudPasajeros from "../database/CrudPasajero";
+import * as crudRevisiones from "../database/CrudRevision";
 import { getListaPasajerosDeNave } from "../utils";
 
 export default {
@@ -87,7 +88,8 @@ export default {
     idNaveRevisada: 0,
     fechaRevision: "",
     listaPasajeros: [],
-    guardandoNave: false,
+
+    creandoRevision: false,
   }),
 
   mounted() {
@@ -109,6 +111,15 @@ export default {
       }
     );
 
+    crudRevisiones.obtenerRevisiones(
+      (listaRevisiones) => {
+        this.historicoRevisiones = listaRevisiones;
+      },
+      (error) => {
+        (this.historicoRevisiones = []), this.showError(error);
+      }
+    );
+
     crudPasajeros.obtenerPasajeros(
       (listaPasajeros) => {
         this.todosPasajeros = listaPasajeros;
@@ -120,18 +131,27 @@ export default {
   },
 
   methods: {
-    guardarNave() {
-      var id = this.idRevisión;
-      var nombre = this.nombreRevisor;
-      this.guardandoNave = true;
-      crudAeronaves.crearAeronave(
-        id,
-        nombre,
+    guardarRevision() {
+      this.creandoRevision = true;
+      crudRevisiones.crearRevision(
+        this.idNaveRevisada,
+        this.nombreRevisor,
+        this.fechaRevision,
         () => {
-          this.guardandoNave = false;
-          this.historicoRevisiones.push(new historicoRevisiones(id, nombre));
+          this.creandoRevision = false;
+          crudRevisiones.obtenerRevisiones(
+            (listaRevisiones) => {
+              this.historicoRevisiones = listaRevisiones;
+            },
+            (error) => {
+              (this.historicoRevisiones = []), this.showError(error);
+            }
+          );
         },
-        (error) => {}
+        (error) => {
+          this.creandoRevision = false;
+          this.showError(error);
+        }
       );
     },
 

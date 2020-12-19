@@ -1,7 +1,9 @@
 export default class Revision {
-    constructor(id, nombre) {
+    constructor(id, idAeronave,nombreRevisor,fechaRevision) {
       this.id = id;
-      this.nombre = nombre;
+      this.idAeronave = idAeronave;
+      this.nombreRevisor = nombreRevisor;
+      this.fechaRevision = fechaRevision;
     }
   }
   
