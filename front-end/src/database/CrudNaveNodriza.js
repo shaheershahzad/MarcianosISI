@@ -1,16 +1,77 @@
-export function crearNaveNodriza(id,nombre,onSuccess,onError){
+const axios = require('axios').default;
 
-    setTimeout(()=>{onSuccess()},3000);
+
+export function crearNaveNodriza(nombre,onSuccess,onError){
+
+    //setTimeout(()=>{onSuccess()},3000);
+
+    axios
+    .post("http://localhost:3000/api/nave", {
+      nombre: nombre,
+    })
+    .then(function() {
+      onSuccess();
+    })
+        .catch(function(error) {
+      console.log(error.response);
+      var errorCode = error.response.status;
+      var errorText = error.response.data;
+      if(errorCode == 404){
+        onError("Parametros no válidos");
+      }else{
+        onError(errorText);
+      }
+    
+    });
 
 }
 import NaveNodriza from "../objects/naveNodriza.js";
 
 export function obtenerNavesNodrizas(onSuccess,onError){
 
-    setTimeout(()=>{onSuccess([
+    /* setTimeout(()=>{onSuccess([
         new NaveNodriza("1", "Nave1"),
         new NaveNodriza("2", "Nave2"),
         new NaveNodriza("3", "Nave3"),
-      ],)},3000);
+      ],)},3000); */
+
+      axios.get('http://localhost:3000/api/nave', { })
+    .then(function (response) {
+        console.log(response.data);
+        var naves = [];
+        response.data.forEach(element => {
+            naves.push(new NaveNodriza(element._id,element.nombre))
+        });
+        console.log("naves");
+  
+        console.log(naves);
+  
+        onSuccess(naves);
+    })
+    .catch(function (error) {
+      console.log(error);
+      onError(error);
+    });
+
+}
+
+
+export function eliminarNaveNodriza(id,onSuccess,onError){
+
+    /* setTimeout(()=>{onSuccess([
+        new NaveNodriza("1", "Nave1"),
+        new NaveNodriza("2", "Nave2"),
+        new NaveNodriza("3", "Nave3"),
+      ],)},3000); */
+
+      axios.delete('http://localhost:3000/api/nave/'+id, { })
+    .then(function (response) {
+      console.log(response.data);
+      onSuccess(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+      onError(error);
+    });
 
 }

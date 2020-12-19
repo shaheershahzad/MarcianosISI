@@ -1,14 +1,210 @@
 <template>
-    <h1>Gestionar pasajeros</h1>
+  <v-container>
+    <v-row>
+      <v-col
+        ><h1>Asignar pasajero</h1>
+        <v-select
+          v-model="idPasajeroAsignar"
+          :items="todosPasajeros"
+          item-text="nombre"
+          item-value="id"
+          label="Pasajero"
+          required
+        ></v-select>
+        <v-select
+          v-model="idAeronaveAsignar"
+          :items="aeronaves"
+          item-text="nombre"
+          item-value="id"
+          label="Aeronave"
+          required
+        ></v-select>
 
+        <v-btn elevation="2" :loading="asignandoPasajero" @click="asignarPasajero">Asignar</v-btn>
+      </v-col>
+      <v-col
+        ><h1>Bajar pasajero</h1>
+
+        <v-select
+          v-model="idPasajeroBajar"
+          :items="todosPasajeros"
+          item-text="nombre"
+          item-value="id"
+          label="Pasajero"
+          required
+        ></v-select>
+
+        <v-select
+          v-model="idAeronaveBajar"
+          :items="aeronaves"
+          item-text="nombre"
+          item-value="id"
+          label="Aeronave"
+          required
+        ></v-select>
+
+        <v-btn elevation="2" :loading="bajandoPasajero" @click="bajarPasajero">Bajar</v-btn>
+      </v-col>
+    </v-row>
+
+    <v-dialog v-model="dialog" max-width="600px">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn color="primary" dark v-bind="attrs" v-on="on">
+          Crear pasajero
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">Crear pasajero</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-text-field
+              v-model="nombreNuevoPasajero"
+              label="Nombre"
+              required
+            ></v-text-field>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialog = false">
+            Cerrar
+          </v-btn>
+          <div></div>
+          <v-btn color="blue darken-1" text @click="crearPasajero">
+            Crear pasajero
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-snackbar v-model="snackbar" :timeout="3000">
+        {{ textoAviso }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+            Cerrar
+          </v-btn>
+        </template>
+      </v-snackbar>
+  </v-container>
 </template>
 
 <script>
-export default {
+import * as crudAeronaves from "../database/CrudAeronaves";
+import * as crudNaveNodriza from "../database/CrudNaveNodriza.js";
+import * as crudPasajeros from "../database/CrudPasajero";
 
-}
+export default {
+  data: () => ({
+    todosPasajeros: null,
+    aeronaves: null,
+    navesNodrizas: null,
+    idPasajeroBajar: "",
+    idPasajeroAsignar: "",
+    idAeronaveBajar: "",
+    idAeronaveAsignar: "",
+    naveDestino: "",
+    nombreNuevoPasajero: "",
+    asignandoPasajero:false,
+    bajandoPasajero:false,
+    dialog: false,
+
+    textoAviso: "",
+    snackbar: false,
+  }),
+
+  mounted() {
+    crudNaveNodriza.obtenerNavesNodrizas(
+      (listaDeNaves) => {
+        this.navesNodrizas = listaDeNaves;
+        crudAeronaves.obtenerAeronaves(
+          this.navesNodrizas,
+          (listaDeNaves) => {
+            this.aeronaves = listaDeNaves;
+          },
+          (error) => {
+            (this.aeronaves = []), this.showError(error);
+          }
+        );
+      },
+      (error) => {
+        (this.navesNodrizas = []), this.showError(error);
+      }
+    );
+    crudPasajeros.obtenerPasajeros(
+      (listaPasajeros) => {
+        this.todosPasajeros = listaPasajeros;
+      },
+      (error) => {
+        (this.aeronaves = []), this.showError(error);
+      }
+    );
+  },
+
+  methods: {
+    showError(error) {
+      this.textoAviso = error;
+      this.snackbar = true;
+    },
+    crearPasajero() {
+      //var id = this.idNaveNueva;
+      //var nombre = this.nombreNaveNueva;
+      this.creandoAeronave = true;
+
+      crudPasajeros.crearPasajero(
+        this.nombreNuevoPasajero,
+        () => {
+          crudPasajeros.obtenerPasajeros(
+            (listaPasajeros) => {
+              this.todosPasajeros = listaPasajeros;
+              this.dialog = false;
+            },
+            (error) => {
+              (this.aeronaves = []), this.showError(error);
+            }
+          );
+        },
+        (error) => {
+          this.creandoAeronave = false;
+          this.showError(error);
+        }
+      );
+    },
+
+    asignarPasajero() {
+      this.asignandoPasajero = true;
+
+      crudAeronaves.anadirPasajero(
+        this.idAeronaveAsignar,
+        this.idPasajeroAsignar,
+        () => {
+          this.asignandoPasajero = false;
+        },
+        (error) => {
+          this.asignandoPasajero = false;
+          this.showError(error);
+        }
+      );
+    },
+
+    bajarPasajero() {
+      this.bajandoPasajero = true;
+
+      crudAeronaves.bajarPasajero(
+        this.idAeronaveBajar,
+        this.idPasajeroBajar,
+        () => {
+          this.bajandoPasajero = false;
+        },
+        (error) => {
+          this.bajandoPasajero = false;
+          this.showError(error);
+        }
+      );
+    },
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

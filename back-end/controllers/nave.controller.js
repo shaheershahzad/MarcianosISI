@@ -7,6 +7,7 @@ naveController.getAllNaves = async (req, res) => {
 };
 
 naveController.createNave = async (req, res) => {
+    console.log(req.body)
     try {
         const nave = new naveModel({
             nombre: req.body.nombre
