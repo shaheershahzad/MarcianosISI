@@ -4,7 +4,6 @@ const axios = require('axios').default;
 export function crearRevision(idAeronave,idRevisor,fechaRevision,onSuccess,onError){
 
     //setTimeout(()=>{onSuccess()},3000);
-
     axios
     .post("http://localhost:3000/api/revision", {
         idAeronave: idAeronave,

@@ -18,7 +18,7 @@
                   {{ item.fechaRevision }}
                 </p>
                 <div class="text--primary">ID: {{ item.id }}</div>
-                <div class="text--primary">NombreRevisor: {{ item.nombreRevisor }}</div>
+                <div class="text--primary">Nombre revisor: {{ item.nombreRevisor }}</div>
                 <div class="text--primary">Aeronave: {{ item.idAeronave }}</div>
               </v-card>
             </template>
@@ -27,11 +27,11 @@
       </v-col>
       <v-col class="pa-4"
         ><h1>Crear revisión</h1>
-        <v-text-field
+        <!--<v-text-field
           v-model="idRevisión"
           label="Id revisión"
           required
-        ></v-text-field>
+        ></v-text-field>-->
 
         <v-text-field
           v-model="nombreRevisor"

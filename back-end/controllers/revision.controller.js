@@ -11,7 +11,8 @@ revisionController.createRevision = async (req, res) => {
         const revision = new revisionModel({
             idAeronave: req.body.idAeronave,
             idRevisor: req.body.idRevisor,
-            fechaRevision: req.body.fechaRevision
+            fechaRevision: req.body.fechaRevision,
+            pasajeros: req.body.pasajeros
         });
         let savedRevision = await revision.save();
         res.json({
