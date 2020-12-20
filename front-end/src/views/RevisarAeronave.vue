@@ -58,7 +58,8 @@
             <div class="text--primary">{{ pasajero.nombre }}</div>
           </div>
         </v-card>
-
+<div class="pa-2"></div>
+ 
         <template>
           <v-btn block :loading="creandoRevision" @click="guardarRevision">
             Generar revision

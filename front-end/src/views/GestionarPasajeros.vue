@@ -1,6 +1,62 @@
 <template>
   <v-container>
     <v-row>
+      <v-col class="pa-4"
+        ><h1>Pasajeros</h1>
+<div class="pa-2"></div>
+<v-dialog v-model="dialog" max-width="600px">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn color="primary" dark v-bind="attrs" v-on="on">
+          Crear pasajero
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">Crear pasajero</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-text-field
+              v-model="nombreNuevoPasajero"
+              label="Nombre"
+              required
+            ></v-text-field>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog = false">
+            Cerrar
+          </v-btn>
+          <div></div>
+          <v-btn color="green darken-1" text @click="crearPasajero">
+            Crear pasajero
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+<div class="pa-2"></div>
+        <template v-if="todosPasajeros == null">
+          <v-progress-circular
+            indeterminate
+            color="primary"
+          ></v-progress-circular
+        ></template>
+
+        <template v-else>
+          <v-virtual-scroll :items="todosPasajeros" item-height="100%">
+            <template v-slot:default="{ item }">
+              <v-card :key="componentKey" class="pa-4" outlined>
+                <p class="display-1 text--primary">
+                  {{ item.nombre }}
+                </p>
+                <div class="text--primary">ID: {{ item.id }}</div>
+              </v-card>
+            </template>
+          </v-virtual-scroll>
+        </template>
+      </v-col>
+
       <v-col
         ><h1>Asignar pasajero</h1>
         <v-select
@@ -47,42 +103,12 @@
       </v-col>
     </v-row>
 
-    <v-dialog v-model="dialog" max-width="600px">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">
-          Crear pasajero
-        </v-btn>
-      </template>
-      <v-card>
-        <v-card-title>
-          <span class="headline">Crear pasajero</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-text-field
-              v-model="nombreNuevoPasajero"
-              label="Nombre"
-              required
-            ></v-text-field>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">
-            Cerrar
-          </v-btn>
-          <div></div>
-          <v-btn color="blue darken-1" text @click="crearPasajero">
-            Crear pasajero
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    
     <v-snackbar v-model="snackbar" :timeout="3000">
         {{ textoAviso }}
 
         <template v-slot:action="{ attrs }">
-          <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+          <v-btn color="green" text v-bind="attrs" @click="snackbar = false">
             Cerrar
           </v-btn>
         </template>

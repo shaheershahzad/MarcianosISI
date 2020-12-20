@@ -9,6 +9,20 @@ Vue.use(Vuetify);
 
 new Vue({
   router,
-  vuetify: new Vuetify(),
+  vuetify: new Vuetify({
+    theme: {
+      themes: {
+        light: {
+          primary: '#4CAF50',
+          secondary: '#cddc39',
+          accent: '#80e27e',
+          error: '#b71c1c',
+          warning: '#009688',
+          info: '#4CAF50',
+          success: '#00bcd4'
+        },
+      },
+    },
+  }),
   render: (h) => h(App),
 }).$mount("#app");
