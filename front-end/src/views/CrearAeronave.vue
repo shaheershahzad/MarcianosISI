@@ -11,7 +11,7 @@
         ></template>
 
         <template v-else>
-          <v-virtual-scroll :items="aeronaves" item-height="250px">
+          <v-virtual-scroll :items="aeronaves" item-height="220px">
             <template v-slot:default="{ item }">
               <v-card :key="componentKey" class="pa-4" outlined>
                 <p class="display-1 text--primary">

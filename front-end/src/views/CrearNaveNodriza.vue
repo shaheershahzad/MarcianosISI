@@ -11,7 +11,7 @@
         ></template>
 
         <template v-else>
-          <v-virtual-scroll :items="navesNodrizas" item-height="100%">
+          <v-virtual-scroll :items="navesNodrizas" item-height="120px">
             <template v-slot:default="{ item }">
               <v-card :key="componentKey" class="pa-4" outlined>
                 <p class="display-1 text--primary">

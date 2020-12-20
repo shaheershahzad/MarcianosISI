@@ -11,7 +11,7 @@
         ></template>
 
         <template v-else>
-          <v-virtual-scroll :items="historicoRevisiones" item-height="100%">
+          <v-virtual-scroll :items="historicoRevisiones" item-height="200px">
             <template v-slot:default="{ item }">
               <v-card :key="componentKey" class="pa-4" outlined>
                 <p class="display-1 text--primary">
@@ -22,6 +22,7 @@
                   Nombre revisor: {{ item.nombreRevisor }}
                 </div>
                 <div class="text--primary">Aeronave: {{ item.idAeronave }}</div>
+                <div class="text--primary">Pasajeros a bordo: {{ item.pasajeros.length }}</div>
               </v-card>
             </template>
           </v-virtual-scroll>
@@ -54,10 +55,16 @@
       color="green lighten-1"
     ></v-date-picker>
 
+                <div class="text--primary">Pasajeros</div>
+
         <v-card :key="componentKey" class="pa-4" outlined>
-          <div v-for="pasajero in listaPasajeros" :key="pasajero.id">
+          <template v-if="listaPasajeros==null"><div class="text--primary">No se ha seleccionado aeronave</div></template>
+
+          <template v-else-if="listaPasajeros.length>0"><div v-for="pasajero in listaPasajeros" :key="pasajero.id">
             <div class="text--primary">{{ pasajero.nombre }}</div>
-          </div>
+          </div></template>
+          <template v-else><div class="text--primary">Aeronave vacia</div></template>
+          
         </v-card>
         <div class="pa-2"></div>
 
@@ -67,7 +74,18 @@
           </v-btn>
         </template></v-col
       ></v-row
-    ></v-container
+    >
+    <v-snackbar v-model="snackbar" :timeout="3000">
+        {{ textoAviso }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="green" text v-bind="attrs" @click="snackbar = false">
+            Cerrar
+          </v-btn>
+        </template>
+      </v-snackbar>
+    
+    </v-container
   >
 </template>
 
@@ -76,7 +94,7 @@ import * as crudAeronaves from "../database/CrudAeronaves";
 import * as crudNaveNodriza from "../database/CrudNaveNodriza.js";
 import * as crudPasajeros from "../database/CrudPasajero";
 import * as crudRevisiones from "../database/CrudRevision";
-import { getListaPasajerosDeNave } from "../utils";
+import { getListaPasajerosDeNave,getListaIdsPasajerosDeNave } from "../utils";
 
 export default {
   data: () => ({
@@ -89,9 +107,13 @@ export default {
     nombreRevisor: "",
     idNaveRevisada: 0,
     fechaRevision: new Date().toISOString().substr(0, 10),
-    listaPasajeros: [],
+    listaPasajeros: null,
 
     creandoRevision: false,
+
+
+    textoAviso: "",
+    snackbar: false,
   }),
 
   mounted() {
@@ -133,12 +155,18 @@ export default {
   },
 
   methods: {
+
+    showError(error) {
+      this.textoAviso = error;
+      this.snackbar = true;
+    },
     guardarRevision() {
       this.creandoRevision = true;
       crudRevisiones.crearRevision(
         this.idNaveRevisada,
         this.nombreRevisor,
         this.parseDate(this.fechaRevision),
+        getListaIdsPasajerosDeNave(this.idNaveRevisada,this.aeronaves),
         () => {
           this.creandoRevision = false;
           crudRevisiones.obtenerRevisiones(

@@ -1,14 +1,15 @@
 const axios = require('axios').default;
 
 
-export function crearRevision(idAeronave,idRevisor,fechaRevision,onSuccess,onError){
+export function crearRevision(idAeronave,idRevisor,fechaRevision,idsPasajeros,onSuccess,onError){
 
     //setTimeout(()=>{onSuccess()},3000);
     axios
     .post("http://localhost:3000/api/revision", {
         idAeronave: idAeronave,
         idRevisor:idRevisor,
-        fechaRevision:fechaRevision
+        fechaRevision:fechaRevision,
+        pasajeros:idsPasajeros
     })
     .then(function() {
       onSuccess();
@@ -33,7 +34,7 @@ export function obtenerRevisiones(onSuccess,onError){
     .then(function (response) {
       var revisiones = [];
         response.data.forEach(element => {
-          revisiones.push(new Revision(element._id,element.idAeronave,element.idRevisor,element.fechaRevision))
+          revisiones.push(new Revision(element._id,element.idAeronave,element.idRevisor,element.fechaRevision,element.pasajeros))
         });
   
         onSuccess(revisiones);

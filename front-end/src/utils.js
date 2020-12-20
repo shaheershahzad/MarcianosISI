@@ -8,6 +8,17 @@ export function getNaveNodrizaFromList(idNave,lista){
 return aeronaveFinal;
 }
 
+export function getListaIdsPasajerosDeNave(idNave,listaNaves){
+    var naveFinal;
+    listaNaves.forEach(aeronave => {
+        if(aeronave.id==idNave){
+            naveFinal =  aeronave;
+        }
+    });
+
+return naveFinal.pasajeros;
+}
+
 export function getListaPasajerosDeNave(idNave,listaNaves,listaTodosPasajeros){
     var listaFinal = [];
     var naveFinal;
