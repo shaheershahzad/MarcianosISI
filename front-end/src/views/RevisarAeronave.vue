@@ -18,7 +18,9 @@
                   {{ item.fechaRevision }}
                 </p>
                 <div class="text--primary">ID: {{ item.id }}</div>
-                <div class="text--primary">Nombre revisor: {{ item.nombreRevisor }}</div>
+                <div class="text--primary">
+                  Nombre revisor: {{ item.nombreRevisor }}
+                </div>
                 <div class="text--primary">Aeronave: {{ item.idAeronave }}</div>
               </v-card>
             </template>
@@ -47,19 +49,18 @@
           label="Aeronave"
           required
         ></v-select>
+<v-date-picker
+      v-model="fechaRevision"
+      color="green lighten-1"
+    ></v-date-picker>
 
-        <v-text-field
-          v-model="fechaRevision"
-          label="Fecha"
-          required
-        ></v-text-field>
         <v-card :key="componentKey" class="pa-4" outlined>
           <div v-for="pasajero in listaPasajeros" :key="pasajero.id">
             <div class="text--primary">{{ pasajero.nombre }}</div>
           </div>
         </v-card>
-<div class="pa-2"></div>
- 
+        <div class="pa-2"></div>
+
         <template>
           <v-btn block :loading="creandoRevision" @click="guardarRevision">
             Generar revision
@@ -87,7 +88,7 @@ export default {
     idRevisión: "",
     nombreRevisor: "",
     idNaveRevisada: 0,
-    fechaRevision: "",
+    fechaRevision: new Date().toISOString().substr(0, 10),
     listaPasajeros: [],
 
     creandoRevision: false,
@@ -137,7 +138,7 @@ export default {
       crudRevisiones.crearRevision(
         this.idNaveRevisada,
         this.nombreRevisor,
-        this.fechaRevision,
+        this.parseDate(this.fechaRevision),
         () => {
           this.creandoRevision = false;
           crudRevisiones.obtenerRevisiones(
@@ -163,6 +164,12 @@ export default {
         this.todosPasajeros
       );
     },
+
+    parseDate (date) {
+        if (!date) return null
+        const [year, month, day] = date.split('-')
+        return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`
+      },
   },
 };
 </script>
