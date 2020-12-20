@@ -1,0 +1,8 @@
+Hemos utilizado el framework VueJS para el front-end, para el back-end hemos utilizado Javascript, 
+para la comunicación hemos utilizado peticiones Http y para la persistencia hemos usado MongoDB
+
+Pasos para la instalación.
+- Ejecutar el servicio de MongoDB
+- Hacer un npm install en la carpeta de front-end y en la carpeta de back-end
+- Ejecutar dentro de la carpeta de back-end con npm run dev y listo. 
+- La web se ejecutara en localhost:8080
